@@ -1,0 +1,22 @@
+  {{- $themeColor := . -}}
+  {{- if not $themeColor -}}
+    {{- $themeColor = "none" -}}
+  {{- end -}}
+  {{- if ne $themeColor "none" -}}
+    {{- if eq $themeColor "colorless" }}
+  <meta name="theme-color" content="white">
+    {{- else }}
+  <meta name="theme-color" content="{{ $themeColor }}">
+    {{- end -}}
+    {{- if hasPrefix $themeColor "#" -}}
+      {{- $themeColor = substr $themeColor 1 -}}
+    {{- end -}}
+    {{- with resources.Get (printf `assets/icons/%s.webp` $themeColor) }}
+  <link rel="icon" type="image/webp" href="{{ .RelPermalink }}">
+    {{- end -}}
+  {{- else }}
+  <link rel="icon" href="data:;base64,=">
+  {{- end -}}
+  {{- with resources.Get (printf `assets/css/%s.css` $themeColor) | css.Build }}
+  <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{- end -}}

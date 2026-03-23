@@ -1,0 +1,30 @@
+{{ printf `<?xml version="1.0" encoding="UTF-8"?>` | safeHTML }}
+<urlset
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{- range where .Pages "Sitemap.Disable" "ne" true -}}
+    {{- if and (not .Params.robots_disallow) (ne .Kind "taxonomy") (ne .Kind "term") -}}
+      {{- if .Permalink }}
+  <url>
+    <loc>{{ .Permalink }}</loc>
+        {{- if not .Lastmod.IsZero }}
+    <lastmod>{{ safeHTML ( .Lastmod.Format .Site.Params.date_formats.iso8601 ) }}</lastmod>
+        {{- end }}
+        {{- with .Sitemap.ChangeFreq }}
+    <changefreq>{{ . }}</changefreq>
+        {{- end }}
+        {{- if ge .Sitemap.Priority 0.0 }}
+    <priority>{{ .Sitemap.Priority }}</priority>
+        {{- end }}
+        {{- if .IsTranslated -}}
+          {{- range .Translations }}
+    <xhtml:link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
+          {{- end }}
+    <xhtml:link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}" />
+        {{- end }}
+  </url>
+      {{- end -}}
+    {{- end -}}
+  {{- end }}
+</urlset>

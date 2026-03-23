@@ -1,0 +1,87 @@
+<main aria-label="Content" itemscope itemtype="https://schema.org/Blog">
+    {{- $params := $.Params -}}
+    {{- $content := .Content -}}
+    {{- if eq .Kind "home" }}
+    <h1 itemprop="headline name">{{ .Site.Title | markdownify }}</h1>
+    {{- else if eq .Kind "taxonomy" }}
+    <h1 itemprop="headline name">{{ printf `%s (%d)` .Title (len .Pages) | markdownify }}</h1>
+    {{- else if eq .Kind "term" }}
+    <h1 itemprop="headline name">{{ printf "%s: %s (%d)" (.Data.Singular | title) .Title (len .Pages) | markdownify }}</h1>
+      {{- if eq .Type "categories" -}}
+        {{- with .Title -}}
+          {{- $params = merge $params (index hugo.Data.categories .) -}}
+          {{- $content = $params.introduction | markdownify -}}
+        {{- end -}}
+      {{- end }}
+    {{- else if eq .Kind "section" }}
+    <h1 itemprop="headline name">{{ .Title | markdownify }}</h1>
+    {{- else }}
+      {{ errorf "Blog index for page kind '%s' not implemented" .Kind }}
+    {{- end }}
+
+    {{- if $content }}
+    <section aria-label="Introduction">
+{{ $content }}    </section>
+    {{- end }}
+
+    {{- if gt (len .Pages) 0 -}}
+      {{- $headingYearOpen := "<h2" -}}
+      {{- $headingYearClose := "</h2>" -}}
+      {{- $headingPostLinkOpen := "<h3" -}}
+      {{- $headingPostLinkClose := "</h3>" -}}
+      {{- if $params.list_title }}
+    <section aria-labelledby="{{ $params.list_title | anchorize }}">
+      <h2 id="{{ $params.list_title | anchorize }}">{{ $params.list_title | markdownify }}</h2>
+        {{- $headingYearOpen = "<h3" -}}
+        {{- $headingYearClose = "</h3>" -}}
+        {{- $headingPostLinkOpen = "<h4" -}}
+        {{- $headingPostLinkClose = "</h4>" -}}
+      {{- end -}}
+      {{- $year := "" -}}
+      {{- $pages := "" -}}
+      {{- if .IsHome -}}
+        {{- $pages = where .Site.RegularPages "Section" "in" .Site.MainSections -}}
+        {{- /* $pages = where .Site.RegularPages "Type" "posts" */ -}}
+      {{- else -}}
+        {{- $pages = .Pages -}}
+      {{- end -}}
+      {{- range $index, $page := $pages -}}
+        {{- $currentYear := $page.Date.Format "2006" -}}
+        {{- if ne $year $currentYear -}}
+          {{- if ne $year "" }}
+      </section>
+          {{- end -}}
+          {{- $year = $currentYear }}
+
+      <section aria-labelledby="{{ $year }}">
+        {{ printf `%s id="%s">%s%s` $headingYearOpen $year $year $headingYearClose | safeHTML }}
+        {{- end }}
+
+        <article itemscope itemtype="https://schema.org/BlogPosting" {{- if $params.colorful_index }} style="margin-bottom: {{ if eq (add $index 1) (len site.RegularPages) }}1em{{ else }}0{{ end }}; padding: 1em; background-color: {{ $page.Params.theme_color }};"{{ end }}>
+          <header>
+        {{- if not $params.hide_dates }}
+            <time itemprop="datePublished" {{ printf `datetime=%q` ($page.Date.Format .Site.Params.date_formats.iso8601) | safeHTMLAttr }}>{{ time.Format (i18n "post.created") $page.Date }}</time>
+        {{- end }}
+            {{ printf "%s %s" $headingPostLinkOpen `itemprop="headline name">` | safeHTML -}}
+        {{- if $params.colorful_index -}}
+          {{- if not $page.Params.hide_list_icon -}}
+            {{- $page.Params.icon | default site.Params.icon -}}&nbsp;
+          {{- end -}}
+        {{- end -}}
+            <a href="{{ $page.RelPermalink | relLangURL }}">{{ $page.LinkTitle | markdownify }}</a>{{ if in $page.Params.content_warnings "video" }}&nbsp;📽️{{ end }}{{ printf "%s" $headingPostLinkClose | safeHTML }}
+          </header>
+        {{- if and site.Params.show_descriptions $page.Description -}}
+          {{- if not $params.hide_descriptions }}
+          <p itemprop="abstract">{{ $page.Description | markdownify }}</p>
+          {{- end -}}
+        {{- end }}
+        </article>
+      {{- end }}
+      </section>
+
+      {{ partial "index/feed-subscription.html" . }}
+      {{- if $params.list_title }}
+    </section>
+      {{- end -}}
+    {{- end }}
+  </main>

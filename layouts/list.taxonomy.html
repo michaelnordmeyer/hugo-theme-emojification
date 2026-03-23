@@ -1,0 +1,30 @@
+{{- define "main" -}}
+  <main aria-label="Content">
+    <article itemscope itemtype="https://schema.org/WebPage">
+      <header>
+        <h1 itemprop="headline name">{{ .Title | title }}&nbsp;({{ len .Data.Terms }})</h1>
+      </header>
+  {{- if gt (len .Data.Terms) 0 }}
+      <div itemprop="mainContentOfPage" itemscope itemtype="https://schema.org/WebPageElement" style="display: flex;">
+        <section style="flex: 50%;">
+          <h2>{{ i18n "taxonomies.by_name" }}</h2>
+          <ul>
+    {{- range .Data.Terms -}}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} ({{ .Count }})</a></li>
+    {{- end }}
+          </ul>
+        </section>
+
+        <section style="flex: 50%;">
+          <h2>{{ i18n "taxonomies.by_post_count" }}</h2>
+          <ul>
+    {{- range .Data.Terms.ByCount -}}
+            <li><a href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} ({{ .Count }})</a></li>
+    {{- end }}
+          </ul>
+        </section>
+      </div>
+  {{- end }}
+    </article>
+  </main>
+{{- end }}

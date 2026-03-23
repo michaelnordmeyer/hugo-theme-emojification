@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}" dir="{{ site.Language.Direction | default `ltr` }}">
+<head>
+{{ partialCached "head/default.html" . }}
+{{- if .Sitemap.Disable }}
+  <meta name="robots" content="noindex">
+{{- end -}}
+{{- partial "head/styles-and-icons.html" (.Params.theme_color | default .Site.Params.theme_color) }}
+  <title>{{ .Title | default .Site.Title | markdownify }}</title>
+{{ partial "custom-head.html" . }}
+</head>
+<body>
+{{ partial "header.html" . }}
+  <main aria-label="Content">
+    <article itemscope itemtype="https://schema.org/WebPage">
+      <header>
+        <h1 itemprop="headline name">{{ .Title | markdownify }}</h1>
+      </header>
+      <div itemprop="mainContentOfPage" itemscope itemtype="https://schema.org/WebPageElement">
+{{ .Content }}
+      </div>
+    </article>
+  </main>
+</body>
+</html>

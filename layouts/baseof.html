@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}" dir="{{ site.Language.Direction | default `ltr` }}">
+{{ partial "head.html" . }}
+<body>
+{{ partial "header.html" . }}
+  {{ block "main" . }}{{- end }}
+{{- partial "custom-footer.html" . }}
+</body>
+</html>

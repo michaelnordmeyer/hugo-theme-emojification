@@ -1,0 +1,17 @@
+{{- $feedFilename := .Site.Params.atom_feed.filename -}}
+  {{- /* All HTML pages */}}
+  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s` .Site.BaseURL $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` .Site.Title .Site.Params.atom_feed.title_separator (i18n `atom_feed.category_all_postfix`) | markdownify }}">
+{{- if and (eq .Kind "term") (eq .Type "categories") -}}
+  {{- /* Category terms */ -}}
+  {{- $slug := .Title | urlize }}
+  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s/%s` .Site.BaseURL $slug $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` site.Title .Site.Params.atom_feed.title_separator ($slug | title) | markdownify }}">
+{{- else if .Params.categories -}}
+  {{- /* Pages belonging to a category */ -}}
+  {{- $term := (index .Params.categories 0) | urlize }}
+  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s/%s` .Site.BaseURL $term $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` site.Title .Site.Params.atom_feed.title_separator ($term | title) | markdownify }}">
+{{- else -}}
+  {{- /* Other pages incl. home, tag terms */ -}}
+  {{- range $term, $weightedPage := .Site.Taxonomies.categories }}
+  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s/%s` site.BaseURL $term $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` site.Title site.Params.atom_feed.title_separator ($term | title) | markdownify }}">
+  {{- end -}}
+{{- end -}}

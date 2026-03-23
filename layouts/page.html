@@ -1,0 +1,30 @@
+{{- define "main" -}}
+  <main aria-label="Content">
+  {{- if eq .Type "posts" }}
+    <article itemscope itemtype="https://schema.org/BlogPosting">
+  {{- else }}
+    <article itemscope itemtype="https://schema.org/WebPage">
+  {{- end }}
+      <header>
+        <h1 itemprop="headline name">{{ .Title | markdownify }}</h1>
+  {{- if and .Date (eq .Type "posts") }}
+        <time itemprop="datePublished" {{ printf `datetime=%q` (.Date.Format .Site.Params.date_formats.iso8601) | safeHTMLAttr }}>{{ time.Format (i18n "post.created") .Date }}</time>
+  {{- end }}
+      </header>
+  {{- if eq .Type "posts" }}
+      <div itemprop="articleBody">
+  {{- else }}
+      <div itemprop="mainContentOfPage" itemscope itemtype="https://schema.org/WebPageElement">
+  {{- end }}
+{{ partial "page-content.html" . }}
+      </div>
+  {{- if eq .Type "posts" }}
+    {{- with .GetTerms "tags" }}
+      <footer>
+        <p><strong>{{ i18n "taxonomies.tags.name_pluralized" }}:</strong>{{ range . }} <a href="{{ .RelPermalink | relLangURL }}" rel="nofollow, noindex"><span>{{ .LinkTitle }} ({{ len .Pages }})</span></a>{{ end }}</p>
+      </footer>
+    {{- end }}
+  {{- end }}
+    </article>
+  </main>
+{{- end }}

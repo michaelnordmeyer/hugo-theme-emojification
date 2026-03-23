@@ -1,0 +1,70 @@
+{
+  "name": {{ site.Title | htmlUnescape | jsonify }},
+  {{ with site.Language.Locale }}"lang": {{ . | jsonify }},{{ end }}
+  {{ with site.Params.shortTitle }}"short_name": {{ . | htmlUnescape | jsonify }},{{ end }}
+  {{ with site.Params.subtitle }}"description": {{ . | htmlUnescape | jsonify }},{{ end }}
+  "start_url": "/?possible_human=homescreen",
+  "scope" : "/",
+  "display": "fullscreen",
+  "orientation": "natural",
+  "dir": "{{ site.Language.Direction | default `ltr` }}",
+  "background_color": "transparent",
+  "shortcuts": [ {{ range $index, $value := site.Menus.main }} {{ if or (lt .Weight 900) hugo.IsServer }}
+    {
+      "name": {{ .Name | jsonify }},
+      "short_name": {{ .Identifier | jsonify }},
+      "url": {{ .URL | jsonify }}
+    }{{ if ne (add $index 1) (len site.Menus.main) }},{{ end }}{{ end }}{{ end }}
+  ],
+  "icons": [
+    {
+      "src": "/assets/icons/favicon.svg",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/assets/icons/android-chrome-36x36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

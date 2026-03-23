@@ -1,0 +1,50 @@
+# https://gohugo.io/functions/dateformat/
+
+[atom_feed]
+  category_all_postfix = 'Alle'
+
+[author]
+  bio = 'Dies ist die Biographie, welche sich in der jeweiligen internationalisierten .toml Konfigurationsdatei im Verziechnis i18n dieses Themes befindet'
+
+[homelink]
+  title = 'Home'
+  aria_label = 'Home Link'
+
+  [homelink.category]
+    title = 'Kategorie Home'
+    aria_label = 'Kategorie Home Link'
+
+  [homelink.tag]
+    title = 'Tag Home'
+    aria_label = 'Tag Home Link'
+
+[posts]
+  [posts.date]
+    other = '2006-01-02'
+
+[post]
+  [post.created]
+    other = '2006-01-02'
+
+  [post.updated]
+    other = 'Aktualisiert 2006-01-02'
+
+[redirect_page]
+  title = 'Weiterleitung…'
+  to = 'Weiterleitung nach'
+  call_to_action = 'Hier klicken, wenn Sie nicht weitergeleitet werden.'
+
+[taxonomies]
+  by_name = "Nach Name"
+  by_post_count = "Nach Anzahl Artikel"
+
+  [taxonomies.categories]
+    name = "Kategorie"
+    name_pluralized = "Kategorien"
+    description_main = "Die Kategorien dieser Site nach Name oder Anzahl Artikel sortiert"
+
+  [taxonomies.tags]
+    name = "Tag"
+    name_pluralized = "Tags"
+    description_prefix = "Alle Posts getagged"
+    description_main = "Die Tags dieser Site nach Name oder Anzahl Artikel sortiert"

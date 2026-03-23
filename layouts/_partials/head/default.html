@@ -1,0 +1,11 @@
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {{- if not .Site.Params.disable_hugo_generator_inject }}
+  {{ hugo.Generator }}
+  {{- end -}}
+  {{- if .Site.Copyright }}
+  <meta name="copyright" content="{{ .Site.Copyright }}">
+  {{- end }}
+  {{- if .Site.Params.license_link }}
+  <link rel="license" href="{{ .Site.Params.license_link }}">
+  {{- end }}

@@ -1,0 +1,130 @@
+{{- $feedSections := site.Params.feedSections | default site.Params.mainSections -}}
+{{- $pages := "" -}}
+{{- if .IsHome -}}
+  {{- $pages = where site.RegularPages "Type" "in" $feedSections -}}
+{{- else -}}
+  {{- $pages = where .RegularPages "Type" "in" $feedSections -}}
+{{- end -}}
+{{- $limit := .Site.Config.Services.RSS.Limit -}}
+{{- if ge $limit 1 -}}
+  {{- $pages = $pages | first $limit -}}
+{{- end -}}
+{{ `<?xml version="1.0" encoding="utf-8"?>` | safeHTML }}
+{{ `<!--
+  This is a web feed, also called RSS feed or Atom feed. You can subscribe to
+  this feed for free to get notified about new posts. Notifications need a
+  feedreader app, also called a newsreader app.
+
+  To subscribe to this feed, copy this URL from the URL bar and add it to your
+  feedreader. Here are some feedreader examples:
+
+  - NetNewsWire, available for iOS, iPadOS, and macOS (free)
+  - Feeder, available for Android (free)
+  - Fluent Reader, available for Windows and macOS (free)
+  - Inoreader, available for Web, iOS, and Android (free with paid upgrade)
+  - Feedbin, available for Web, iOS, iPadOS, macOS, Windows, and Android (paid)
+-->` | safeHTML }}
+<feed xmlns="http://www.w3.org/2005/Atom" {{- with site.Language.Locale }} xml:lang="{{ . }}"{{ end }}>
+  {{- if not site.Params.disable_hugo_generator_inject }}
+  <generator uri="https://gohugo.io/" version="{{ hugo.Version }}">Hugo</generator>
+  {{- end }}
+  {{- with .OutputFormats.Get "atom" }}
+  {{ printf `<link rel="self" type=%q href=%q />` .MediaType.Type .Permalink | safeHTML -}}
+  {{- end -}}
+  {{- with .OutputFormats.Get "html" }}
+  {{ printf `<link rel="alternate" type=%q href=%q hreflang=%q />` .MediaType.Type .Permalink site.Language.Locale | safeHTML -}}
+  {{- end -}}
+  {{- range .Translations -}}
+    {{- $locale := .Language.Locale -}}
+    {{- $language := index site.Data.i18n.languages .Name -}}
+    {{- $output_formats := .OutputFormats -}}
+    {{- range $output_formats -}}
+      {{- with $output_formats.Get .Name }}
+  {{ printf `<link rel="alternate" type=%q href=%q hreflang=%q title="[%s] %s" />` .MediaType.Type .Permalink $locale $language .Name | safeHTML -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end }}
+  <updated>{{ now.Format .Site.Params.date_formats.rfc3339 | safeHTML }}</updated>
+  <id>{{ .Permalink }}{{ .Site.Params.atom_feed.filename }}</id>
+  <icon>{{ printf `assets/icons/%s.webp` site.Params.theme_color | absURL | transform.XMLEscape }}</icon>
+  {{- $title := "" -}}
+  {{- if .IsHome -}}
+    {{- $title = printf `%s%s%s` .Site.Title .Site.Params.atom_feed.title_separator (i18n `atom_feed.category_all_postfix`) -}}
+  {{- else -}}
+    {{- $title = printf `%s%s%s` .Site.Title .Site.Params.atom_feed.title_separator .Title -}}
+  {{- end }}
+  <title>{{ $title | markdownify | plainify | safeHTML }}</title>
+  {{- with site.Params.subtitle }}
+  <subtitle>{{ . | markdownify | plainify | safeHTML }}</subtitle>
+  {{- end -}}
+  {{- with site.Params.author.name }}
+  <author>
+    <name>{{ . }}</name>
+    {{- with site.Params.author.email }}
+    <email>{{ . }}</email>
+    {{- end }}
+    {{- with site.Params.author.uri }}
+    <uri>{{ . }}</uri>
+    {{- end }}
+  </author>
+  {{- end -}}
+  {{- with site.Copyright -}}
+    {{- $copyright := replace . "{year}" now.Year -}}
+    {{- $copyright = replace $copyright "&copy;" "©" }}
+  <rights>{{ $copyright | plainify }}</rights>
+  {{- end -}}
+  {{- range $pages }}
+  <entry>
+    <title>{{ .Title | markdownify | plainify | safeHTML }}</title>
+    <link href="{{ .Permalink }}" rel="alternate" type="text/html" title="{{ .Title | markdownify | safeHTML }}" />
+    <published>{{ .Date.Format .Site.Params.date_formats.rfc3339 | safeHTML }}</published>
+    <updated>{{ .Lastmod.Format .Site.Params.date_formats.rfc3339 | safeHTML }}</updated>
+    {{- if .Params.uuid }}
+    <id>{{ printf "urn:uuid:%s" .Params.uuid }}</id>
+    {{- else -}}
+    <id>{{ .Permalink }}</id>
+    {{- end -}}
+    {{- with site.Params.author.name }}
+    <author>
+      <name>{{ . }}</name>
+        {{- with site.Params.author.email }}
+      <email>{{ . }}</email>
+        {{- end }}
+        {{- with site.Params.author.uri }}
+      <uri>{{ . }}</uri>
+        {{- end }}
+    </author>
+    {{- end -}}
+    {{- range .Params.categories }}
+    <category term="{{ . }}" />
+    {{- end }}
+    {{- range .Params.tags }}
+    <category term="{{ . }}" />
+    {{- end }}
+    {{- if .Params.featured_image.path }}
+    <media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="{{ .Params.featured_image.path | absURL | transform.XMLEscape }}" />
+    <media:content xmlns:media="http://search.yahoo.com/mrss/" url="{{ .Params.featured_image.path | absURL | transform.XMLEscape }}" medium="image" />
+    {{- end -}}
+    {{- $postSummary := .Description | default .Summary -}}
+    {{- if $postSummary }}
+      {{- if site.Params.atom_feed.markdownify -}}
+        {{- $postSummary = $postSummary | markdownify -}}
+      {{- end }}
+    <summary>{{ replace ($postSummary | plainify) "  " " " }}</summary>
+    {{- end -}}
+    {{- $descriptionOnly := .Params.atom_feed.description_only | default site.Params.atom_feed.description_only -}}
+    {{- $postContent := "" }}
+    {{- if $descriptionOnly -}}
+      {{- $postContent = printf `<p><a href="%s"><strong>%s</strong></a></p>` .Permalink $postSummary }}
+    {{- else }}
+      {{- if site.Params.atom_feed.markdownify }}
+        {{- $postContent = .Content | markdownify }}
+      {{- else -}}
+        {{- $postContent = .Content }}
+      {{- end -}}
+      {{- $postContent = printf "<p><strong>%s</strong></p>%s" $postSummary $postContent }}
+    {{- end }}
+    {{ printf `<content type="html" xml:base="%s"><![CDATA[%s]]></content>` .Permalink $postContent | safeHTML }}
+  </entry>
+  {{- end }}
+</feed>

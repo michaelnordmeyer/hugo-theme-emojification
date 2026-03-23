@@ -1,0 +1,15 @@
+name = 'Hugo Theme Emojification'
+license = 'MIT'
+license_link = 'https://github.com/michaelnordmeyer/hugo-theme-emojification/blob/main/LICENSE'
+description = 'A simple and minimal single-author theme with configurable big emoji as the header link, and configurable background colors, which can be chosen for each post or page'
+homepage = 'https://github.com/michaelnordmeyer/hugo-theme-emojification'
+demosite = 'https://hugo-theme-emojification.michaelnordmeyer.com/'
+
+tags = ['simple', 'minimal', 'minimalist', 'clean', 'fast', 'responsive', 'dark mode', 'privacy', 'blog', 'emoji']
+features = ['blog', 'fast', 'personal', 'dark mode']
+
+[author]
+  name = 'Michael Nordmeyer'
+  homepage = 'https://michaelnordmeyer.com/'
+
+min_version = '0.158.0'

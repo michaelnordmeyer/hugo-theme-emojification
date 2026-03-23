@@ -1,0 +1,76 @@
+# CHANGE THIS means the user needs to configure this in the site's hugo.toml
+
+baseURL = 'https://hugo-theme-emojification.michaelnordmeyer.com/' # CHANGE THIS
+capitalizeListTitles = false
+copyright = 'Copyright © Firstname Lastname' # CHANGE THIS
+enableRobotsTXT = true
+locale = 'en-US' # CHANGE THIS
+timeZone = 'Europe/London' # CHANGE THIS
+title = 'My New Hugo Site' # CHANGE THIS
+
+[params] # https://gohugo.io/configuration/params/
+  disable_hugo_generator_inject = true # Replaces Hugo's disableHugoGeneratorInject (set it to true). Applies to all pages and Atom feed
+  fediverse_creator = '@username@fediverse.example' # CHANGE THIS # "@username@fediverse.example"
+  icon = '🌳' # Can be declared in front matter as well
+  lazy_load = true
+  license_link = 'https://github.com/michaelnordmeyer/hugo-theme-emojification/blob/main/LICENSE'
+  # show_descriptions is used to enable descriptions on pages and index pages like home and categories
+  show_descriptions = true
+  subtitle = 'The subtitle' # CHANGE THIS # Used for Atom feed, SEO, and web app manifest
+  theme_color = 'yellowgreen' # default: none (= no colors. If this CSS file is missing, there will be also no structural styling), and no favicon
+  title_separator = ' - '
+
+  [params.atom_feed]
+    description_only = false # Can be declared in front matter as well
+    filename = 'feed.xml'
+    markdownify = true
+    path = '/feed.xml'
+    title_separator = ': '
+
+  [params.author]
+    # email = 'email@site.example' # CHANGE THIS
+    name = 'Firstname Lastname' # CHANGE THIS
+    uri = 'https://site.example/' # CHANGE THIS
+
+  [params.date_formats]
+    # iso8601 = '2006-01-02T15:04:05Z'
+    iso8601 = '2006-01-02T15:04:05-07:00'
+    rfc822 = 'Mon, 02 Jan 2006 15:04:05 MST'
+    rfc3339 = '2006-01-02T15:04:05-07:00' # Could be called a subset of iso8601
+
+  [[params.socials]] # Social links are used in SEO meta headers
+    name = 'Gitforge' # CHANGE THIS
+    link = 'https://gitforge.example/username' # CHANGE THIS
+
+  [[params.socials]] # Social links are used in SEO meta headers
+    name = 'Fediverse' # CHANGE THIS
+    link = 'https://fediverse.example/@username' # CHANGE THIS
+
+[mediatypes] # https://gohugo.io/configuration/media-types/
+  [mediatypes.'application/atom+xml']
+    suffixes = ['xml']
+
+[menus] # https://gohugo.io/configuration/menus/
+  [[menus.main]] # Needed for webmanifest
+    name = 'Home' # CHANGE THIS
+    pageRef = '/'
+    weight = 10
+
+[module]
+  [module.hugoVersion]
+    extended = true # Extended: adds .webp, .scss
+    min = "0.146.0"
+    # max = "0.199.0"
+
+[outputformats] # https://gohugo.io/configuration/output-formats/
+  [outputformats.atom]
+    basename = 'feed'
+    mediatype = 'application/atom+xml'
+    nougly = true
+
+[outputs] # https://gohugo.io/configuration/outputs/
+  home = ['html', 'atom', 'webappmanifest']
+  page = ['html']
+  section = ['html', 'atom']
+  taxonomy = ['html', 'atom']
+  term = ['html', 'atom']

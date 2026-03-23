@@ -1,0 +1,25 @@
+{{- /* https://gohugo.io/render-hooks/links/#examples */ -}}
+{{- /* automatically adds a rel="external attribute to external links. If you want to allow setting rel/target/etc. within Markdown, you could add query string parameters and read them in the hook: [link to somewhere](/some/link/?rel=foo&target=bar) */ -}}
+{{- $url := urls.Parse .Destination -}}
+{{- /* DISABLED. Add: {{- if $url.IsAbs }} rel="external"{{ end -}} */ -}}
+{{- $title := "" -}}
+{{- $rel := "" -}}
+{{- $itemprop := "" -}}
+{{- with .Title -}}
+  {{- $title = replaceRE `(\{.+\})` "" . | strings.TrimRight " " -}}
+  {{- $matchRel := findRESubmatch `rel='([a-zA-Z]+)'` . -}}
+  {{- with $matchRel -}}
+    {{- $rel = index . 0 1 -}}
+  {{- end -}}
+  {{- $matchItemprop := findRESubmatch `itemprop='([a-zA-Z]+)'` . -}}
+  {{- with $matchItemprop -}}
+    {{- $itemprop = index . 0 1 -}}
+  {{- end -}}
+{{- end -}}
+<a href="{{ .Destination | safeURL }}"
+  {{- with $title }} title="{{ . }}"{{ end -}}
+  {{- with $itemprop }} itemprop="{{ . }}"{{ end -}}
+  {{- with $rel }} rel="{{ . }}"{{ end -}}
+>
+  {{- with .Text }}{{ . }}{{ end -}}
+</a>

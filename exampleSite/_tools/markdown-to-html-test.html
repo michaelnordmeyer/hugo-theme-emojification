@@ -1,0 +1,228 @@
+<h2>HTML Tags Supported by Markdown</h2>
+
+<p>These supported tags come from the WordPress.com code <a title="Code" href="http://en.support.wordpress.com/code/">FAQ</a></p>
+
+<h1>Heading One</h1>
+<h2>Heading Two</h2>
+<h3>Heading Three</h3>
+<h4>Heading Four</h4>
+<h5>Heading Five</h5>
+<h6>Heading Six</h6>
+
+<h3>Paragraphs</h3>
+
+<p>An ordinary paragraph with some text.</p>
+
+<p>Another paragraph with more text to show, how the paragraph spacing is done. Note: Paragraphs with proper line height are mandatory for a good reading experience. Too large or too little makes a webpage unattractive.</p>
+
+<h3>Lists</h3>
+
+<h4>Unordered Lists (Nested)</h4>
+
+<ul>
+  <li>List item one
+    <ul>
+      <li>List item one
+        <ul>
+          <li>List item one</li>
+          <li>List item two</li>
+          <li>List item three</li>
+        </ul>
+      </li>
+      <li>List item two</li>
+      <li>List item three</li>
+    </ul>
+  </li>
+  <li>List item two</li>
+  <li>List item three</li>
+</ul>
+
+<h4>Ordered List (Nested)</h4>
+
+<ol>
+  <li>List item one
+    <ol>
+      <li>List item one
+        <ol>
+          <li>List item one</li>
+          <li>List item two</li>
+          <li>List item three</li>
+        </ol>
+      </li>
+      <li>List item two</li>
+      <li>List item three</li>
+    </ol>
+  </li>
+  <li>List item two</li>
+  <li>List item three</li>
+</ol>
+
+<h3>Anchor Tag (aka Link)</h3>
+
+<p>This is a <a title="A Title" href="https://example.com/">link</a>.</p>
+
+<h3>Blockquote Tag</h3>
+
+<p>Single-line blockquote:</p>
+
+<blockquote>The most complicated skill is to be simple.</blockquote>
+
+<p>Multi-line blockquote with a cite reference:</p>
+
+<blockquote>That’s been one of my mantras – focus and simplicity. Simple can be harder than complex. You have to work hard to get your thinking clean to make it simple. But it’s worth it in the end because once you get there, you can move mountains. —<cite>Steve Jobs</cite></blockquote>
+
+<h3>Code Tag</h3>
+
+<p>A code tag markups code <code>print("Hello World")</code> for better separation from the text around it.</p>
+
+<h3>Emphasize Tag</h3>
+
+<p>The emphasize tag should <em>italicize</em> text.</p>
+
+<h3>Image Tag</h3>
+
+<p>This will show the image of <code>icon.webp</code>, if it exists:</p>
+
+<img src="/icon.webp" title="Image Title Text" alt="Image Alt Text" width="180" height="180">
+
+<h3>Pre-Formatted Tag</h3>
+
+<p>This tag styles large blocks of code:</p>
+
+<pre>
+.header {
+  margin: 2em 0;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+</pre>
+
+<p>This tag was generated from Markdown’s code fencing <code>```</code> with rouge syntax highlighter for no specific syntax:</p>
+
+<pre><code>.header {
+  margin: 2em 0;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 1.5;
+}
+</code></pre>
+
+<h3>Strong Tag</h3>
+
+<p>This tag shows <strong>bold</strong> text.</p>
+
+<hr>
+
+<h2>HTML Tags Supported by GitHub-Flavored Markdown</h2>
+
+<h3>Tables (With Caption)</h3>
+
+<table>
+  <caption>The Table Caption</caption>
+  <thead>
+    <tr>
+      <th>Character</th>
+      <th class="views">Appearance</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="odd">
+      <td><a href="https://en.wikipedia.org/wiki/Donald_Duck">Donald Duck</a></td>
+      <td style="text-align: right">1934</td>
+    </tr>
+    <tr class="even">
+      <td><a href="https://en.wikipedia.org/wiki/Huey,_Dewey,_and_Louie">Huey, Dewey, and Louie</a></td>
+      <td style="text-align: right">1937</td>
+    </tr>
+    <tr class="odd">
+      <td><a href="https://en.wikipedia.org/wiki/Scrooge_McDuck">Scrooge McDuck</a></td>
+      <td style="text-align: right">1947</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Delete Tag</h3>
+
+<p>This tag will let you <del>strikeout</del> text.</p>
+
+<h3>Footnotes</h3>
+
+<p>Footnotes<sup id="fnref:1" role="doc-noteref"><a href="#fn:1" class="footnote" rel="footnote">1</a></sup> are not tags and therefore don’t belong to the HTML standard. Yet some Markdown parsers support them.</p>
+
+<hr>
+
+<h2>HTML Tags Not Supported by Markdown</h2>
+
+<h3>Definition Lists</h3>
+
+<dl>
+  <dt>Definition List Title</dt>
+  <dd>Definition list division.</dd>
+
+  <dt>Startup</dt>
+  <dd>A startup company or startup is a company or temporary organization designed to search for a repeatable and scalable business model.</dd>
+</dl>
+
+<h3>Abbreviation Tag</h3>
+
+<p>The abbreviation <abbr title="Seriously">srsly</abbr> stands for “seriously”.</p>
+
+<h3>Address Tag</h3>
+
+<address>1 Infinite Loop
+Cupertino, CA 95014
+United States</address>
+
+<h3>Cite Tag</h3>
+
+<p>“Code is poetry.” —<cite>Automattic</cite></p>
+
+<h3>Dfn Tag</h3>
+
+<p>The <dfn>HTML element</dfn> is used to indicate the term being defined within the context of a definition phrase or sentence.</p>
+
+<h3>Figure and Figcaption Tag</h3>
+
+<figure>
+  <img src="/icon.webp" title="Image Title Text" alt="Image Alt Text" width="180" height="180">
+  <figcaption>The Image Caption</figcaption>
+</figure>
+
+<h3>Insert Tag</h3>
+
+<p>This tag should denote <ins>inserted</ins> text.</p>
+
+<h3>Keyboard Tag</h3>
+
+<p>This scarcely known tag emulates <kbd>keyboard</kbd> text, which is usually styled like the <code>&lt;code&gt;</code> tag.</p>
+
+<h3>Mark Tag</h3>
+
+<p>This scarcely known tag <mark>marks</mark> text.</p>
+
+<h3>Quote Tag</h3>
+
+<p><q>Developers, developers, developers...</q> —Steve Ballmer</p>
+
+<h3>Subscript Tag</h3>
+
+<p>Getting our science styling on with H<sub>2</sub>O, which should push the “2” down. But we also need to create a longer paragraph to be able to show, if the push down results in a bigger line height for the line, in which the push down is happening.</p>
+
+<h3>Superscript Tag</h3>
+
+<p>We need to create a longer paragraph to be able to show, if the lift up results in a bigger line height for the line, in which the lift up is happening. So, still sticking with science and Albert Einstein’s E = mc<sup>2</sup>, which should lift the “2” up.</p>
+
+<h3>Variable Tag</h3>
+
+<p>This allows you to denote <var>variables</var>.</p>
+
+<hr>
+
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:1">
+      <p>You can go back to the place, where the <code class="language-plaintext highlighter-rouge">footnote</code> was made.&nbsp;<a href="#fnref:1" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>

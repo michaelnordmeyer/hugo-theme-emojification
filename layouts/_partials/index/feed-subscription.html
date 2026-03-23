@@ -1,0 +1,17 @@
+{{- $categoryText := "" -}}
+{{- $feedFilename := site.Params.atom_feed.filename -}}
+{{- $feedLink := "" -}}
+{{- if and (eq .Kind "term") (eq .Type "categories") -}}
+  {{- $categoryText = printf "%s “%s”" .Data.Singular .Title -}}
+  {{- if eq .Data.Singular "category" }}
+    {{- $feedLink = printf "/%s/%s" (.Title | urlize) $feedFilename -}}
+  {{- else -}}
+    {{- $feedLink = printf "/%s/%s/%s" .Data.Plural (.Title | urlize) $feedFilename -}}
+  {{- end -}}
+{{- else if .IsHome -}}
+  {{- $categoryText = "all categories" -}}
+  {{- $feedLink = printf "/%s" $feedFilename -}}
+{{- end -}}
+{{- if ne $categoryText "" -}}
+<footer aria-label="Feed subscription offer for {{ $categoryText }}">Subscribe to updates of {{ $categoryText }} via <a href="{{ $feedLink | relLangURL }}" rel="alternate noindex">Atom feed</a></footer>
+{{- end }}

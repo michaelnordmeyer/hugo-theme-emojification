@@ -1,0 +1,113 @@
+{{- $htmlTitle := "" -}}
+{{- $metaTitle := "" -}}
+{{- if .Title -}}
+  {{- $htmlTitle = printf "%s%s%s" .Title .Site.Params.title_separator .Site.Title | markdownify -}}
+  {{- $metaTitle = .Title | markdownify -}}
+{{- else -}}
+  {{- $htmlTitle = printf "%s%s%s" .Site.Title .Site.Params.title_separator .Site.Params.subtitle | markdownify -}}
+  {{- $metaTitle = $htmlTitle -}}
+{{- end -}}
+{{- $description := .Site.Params.subtitle | markdownify -}}
+{{- if .Description -}}
+  {{- $description = .Description | markdownify -}}
+{{- /* else if .Summary */ -}}
+  {{- /* $description = .Summary | plainify | markdownify */ -}}
+{{- else if and (eq .Kind "term") (eq .Type "categories") -}}
+  {{- with .Title -}}
+    {{- $categoryData := index hugo.Data.categories . -}}
+    {{- $description = $categoryData.description | markdownify -}}
+  {{- end -}}
+{{- else if and (eq .Kind "term") (eq .Type "tags") -}}
+  {{- with .Title -}}
+    {{- $description = printf `%s “%s”` (i18n "taxonomies.tags.description_prefix") . | markdownify -}}
+  {{- end -}}
+{{- else if and (eq .Kind "taxonomy") (eq .Type "categories") -}}
+  {{- $description = printf `%s` (i18n "taxonomies.categories.description_main") | markdownify -}}
+{{- else if and (eq .Kind "taxonomy") (eq .Type "tags") -}}
+  {{- $description = printf `%s` (i18n "taxonomies.tags.description_main") | markdownify -}}
+{{- end -}}
+{{- $openGraphType := "website" -}}
+{{- $jsonLDType := "Blog" -}}
+{{- if .IsHome -}}
+  {{- $jsonLDType = "Blog" -}}
+{{- else if and .IsPage (eq .Type "posts") -}}
+  {{- $openGraphType = "article" -}}
+  {{- $jsonLDType = "BlogPosting" -}}
+{{- else if and .IsPage (eq .Type "page") -}}
+  {{- $openGraphType = "article" -}}
+  {{- $jsonLDType = "WebPage" -}}
+{{- end }}
+  <title>{{ $htmlTitle }}</title>
+  {{ with $description }}<meta name="description" content="{{ . }}">{{ end }}
+  <link rel="canonical" href="{{ .Permalink }}">
+  {{ with site.Params.author.name }}<meta name="author" content="{{ . }}">{{ end }}
+  <meta property="og:title" content="{{ $metaTitle }}">
+  <meta property="og:locale" content="{{ replace .Site.Language.Locale `-` `_` }}">
+  {{ with $description }}<meta property="og:description" content="{{ . }}">{{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:site_name" content="{{ .Site.Title | markdownify }}">
+  <meta property="og:type" content="{{ $openGraphType }}">
+{{- if eq $openGraphType "article" }}
+  <meta property="article:published_time" {{ printf `content=%q` (.Date.Format .Site.Params.date_formats.rfc3339) | safeHTMLAttr }}>
+  {{- if and .Lastmod (ne .Lastmod .Date) }}
+  <meta property="article:modified_time" {{ printf `content=%q` (.Lastmod.Format .Site.Params.date_formats.rfc3339) | safeHTMLAttr }}>
+  {{- end -}}
+{{- end }}
+{{- if .Params.featured_image.path }}
+  <meta property="og:image" content="{{ .Params.featured_image.path | absURL }}">
+  {{- if .Params.featured_image.alt }}
+  <meta property="og:image:alt" content="{{ .Params.featured_image.alt }}">
+  {{- end -}}
+{{- end }}
+  <script type="application/ld+json">{
+    "@context": "https://schema.org",
+    "@type": "{{ $jsonLDType }}",
+    "@id": {{ printf `%s#%s` .Permalink $jsonLDType }},
+    "url": {{ .Permalink }},
+    "headline": {{ $metaTitle | safeHTML }},
+    "inLanguage": "{{ .Site.Language.Locale }}",
+    {{- if .Date }}
+    "datePublished": {{ .Date.Format .Site.Params.date_formats.iso8601 | safeHTML }},
+      {{- if and .Lastmod (ne .Lastmod .Date) }}
+    "dateModified": {{ .Lastmod.Format .Site.Params.date_formats.iso8601 | safeHTML }},
+      {{- end -}}
+    {{- end }}
+    "author": {
+      "@type": "Person",
+      "@id": {{ printf `%s#%s` .Site.BaseURL "Person" }},
+      "url": {{ .Site.BaseURL }},
+      "name": {{ .Site.Params.author.name | safeHTML }},
+      "sameAs": [
+        {{- range $index, $social := .Site.Params.socials }}
+        {{ $social.link }}{{ if ne (add $index 1) (len site.Params.socials) }},{{ end }}
+        {{- end }}
+      ]
+    },
+    {{- with $description }}
+    "abstract": {{ . | safeHTML }},
+    {{- end -}}
+    {{- with .Params.featured_image.path }}
+    "image": {
+      "@type": "ImageObject",
+      "url": {{ . | absURL }}
+    },
+    {{- end -}}
+    {{- if eq $jsonLDType "BlogPosting" }}
+    "wordCount": "{{ .WordCount }}",
+    "isPartOf": {
+      "@type" : "Blog",
+      "@id": {{ printf `%s#%s` (.Site.BaseURL | absLangURL) "Blog" }}
+    },
+    {{- end }}
+    "publisher": {
+      "@type": "Person",
+      "@id": {{ printf `%s#%s` .Site.BaseURL "Person" }},
+      "url": {{ .Site.BaseURL }},
+      "name": {{ .Site.Params.author.name | safeHTML }},
+      "sameAs": [
+        {{- range $index, $social := .Site.Params.socials }}
+        {{ $social.link }}{{ if ne (add $index 1) (len site.Params.socials) }},{{ end }}
+        {{- end }}
+      ]
+    }
+  }</script>

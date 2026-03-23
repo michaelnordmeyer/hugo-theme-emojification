@@ -1,0 +1,39 @@
+      {{- $icon := .Site.Params.icon -}}
+      {{- $home_link := .Site.BaseURL -}}
+      {{- $home_link_title := i18n "homelink.title" -}}
+      {{- $home_link_aria_label := i18n "homelink.aria_label" -}}
+      {{- if eq .Kind "term" -}}
+        {{- if eq .Type "categories" -}}
+          {{- with .Title -}}
+            {{- $categoryData := index hugo.Data.categories . -}}
+            {{- $icon = $categoryData.icon -}}
+          {{- end -}}
+        {{- else if eq .Type "tags" -}}
+          {{- $tagTaxonomyData := index hugo.Data.taxonomies "tag" -}}
+          {{- $icon = $tagTaxonomyData.icon -}}
+          {{- $home_link = printf "%s/tags/" $home_link -}}
+          {{- $home_link_title = i18n "homelink.tag.title" -}}
+          {{- $home_link_aria_label = i18n "homelink.tag.aria_label" -}}
+        {{- end }}
+      {{- else if eq .Kind "taxonomy" -}}
+        {{- if eq .Type "categories" -}}
+          {{- $categoryTaxonomyData := index hugo.Data.taxonomies "category" -}}
+          {{- $icon = $categoryTaxonomyData.icon -}}
+        {{- else if eq .Type "tags" -}}
+          {{- $tagTaxonomyData := index hugo.Data.taxonomies "tag" -}}
+          {{- $icon = $tagTaxonomyData.icon -}}
+        {{- end }}
+      {{- else if .IsPage -}}
+          {{- $category := index .Params.categories 0 -}}
+          {{- with $category -}}
+            {{- $categoryData := index hugo.Data.categories . -}}
+            {{- $icon = $categoryData.icon -}}
+            {{- $home_link = printf "%s/%s/" $home_link ($category | urlize) -}}
+            {{- $home_link_title = i18n "homelink.category.title" -}}
+            {{- $home_link_aria_label = i18n "homelink.category.aria_label" -}}
+          {{- end -}}
+      {{- end -}}
+      {{- if .Params.icon -}}
+        {{- $icon = .Params.icon -}}
+      {{- end -}}
+      <a href="{{ $home_link | relLangURL }}" title="{{ $home_link_title }}" aria-label="{{ $home_link_aria_label }}">{{ if not .Params.hide_icon }}{{ $icon }}{{ end }}</a>

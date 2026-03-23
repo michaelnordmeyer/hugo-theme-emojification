@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="{{ site.Language.Locale }}" dir="{{ site.Language.Direction | default `ltr` }}">
+<head>
+{{ partialCached "head/default.html" . }}
+{{- partial "head/styles-and-icons.html" (.Params.theme_color | default .Site.Params.theme_color) }}
+  <meta http-equiv="refresh" content="0; url={{ .Permalink | relLangURL }}">
+  <title>{{ (i18n "redirect_page.title") }}</title>
+  <link rel="canonical" href="{{ .Permalink }}">
+</head>
+<body>
+{{ partial "header.html" . }}
+  <main aria-label="Content">
+    <article itemscope itemtype="https://schema.org/WebPage">
+      <header>
+        <h1 itemprop="headline name">{{ i18n "redirect_page.title" }}</h1>
+      </header>
+      <div itemprop="mainContentOfPage" itemscope itemtype="https://schema.org/WebPageElement">
+        <p>{{ i18n "redirect_page.to" }} {{ .Permalink | relLangURL }}.</p>
+        <p><a href="{{ .Permalink | relLangURL }}">{{ i18n "redirect_page.call_to_action" }}</a></p>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

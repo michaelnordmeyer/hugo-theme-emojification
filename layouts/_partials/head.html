@@ -1,0 +1,18 @@
+<head>
+{{- $theme_color := .Params.theme_color | default .Site.Params.theme_color -}}
+{{- if and (eq .Kind "term") (eq .Type "categories") -}}
+  {{- with .Title -}}
+    {{- $data := index hugo.Data.categories . -}}
+    {{- $theme_color = $data.theme_color | default $theme_color -}}
+  {{- end -}}
+{{- end }}
+{{ partialCached "head/default.html" . }}
+{{- if or (.Sitemap.Disable) (eq .Kind "taxonomy") (eq .Kind "term") }}
+  <meta name="robots" content="noindex">
+{{- end -}}
+{{- partial "head/styles-and-icons.html" $theme_color }}
+{{- partial "head/atomfeed-meta.html" . -}}
+{{- partialCached "head/rel-me.html" . }}
+{{- partial "head/seo.html" . }}
+{{ partial "custom-head.html" . }}
+</head>

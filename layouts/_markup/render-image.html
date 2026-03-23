@@ -1,0 +1,38 @@
+{{- /* https://gohugo.io/render-hooks/images/#examples */ -}}
+{{- $title := "" -}}
+{{- $width := "" -}}
+{{- $height := "" -}}
+{{- $style := "" -}}
+{{- with .Title -}}
+  {{- $title = replaceRE `(\{.+\})` "" . | strings.TrimRight " " -}}
+  {{- $match := findRESubmatch `(width|height)='([0-9]+)'` . -}}
+  {{- with $match -}}
+    {{- $width = index . 0 2 -}}
+    {{- $height = index . 1 2 -}}
+  {{- end -}}
+  {{- $match = findRESubmatch `style='(.+)'` . -}}
+  {{- with $match -}}
+    {{- $style = index . 0 1 -}}
+  {{- end -}}
+{{- end -}}
+{{- if .IsBlock -}}
+<figure>
+  <img src="{{ .Destination | safeURL }}"
+    {{- with .PlainText }} alt="{{ . }}"{{ end -}}
+    {{- with site.Params.lazy_load }} loading="lazy"{{ end -}}
+    {{- with $width }} width="{{ . }}"{{ end -}}
+    {{- with $height }} height="{{ . }}"{{ end -}}
+    {{- with $style }}{{ printf ` style=%q` . | safeHTMLAttr }}{{ end -}}
+  >
+  {{- with $title }}<figcaption>{{ . }}</figcaption>{{- end }}
+</figure>
+{{ else -}}
+<img src="{{ .Destination | safeURL }}"
+  {{- with .PlainText }} alt="{{ . }}"{{ end -}}
+  {{- with $title }} title="{{ . }}"{{ end -}}
+  {{- with site.Params.lazy_load }} loading="lazy"{{ end -}}
+  {{- with $width }} width="{{ . }}"{{ end -}}
+  {{- with $height }} height="{{ . }}"{{ end -}}
+  {{- with $style }} {{ printf ` style=%q` . | safeHTMLAttr }}{{ end -}}
+>
+{{- end }}

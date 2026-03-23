@@ -1,0 +1,9 @@
+{{- if .Params.featured_image.path -}}
+<img itemprop="image" src="{{ .Params.featured_image.path | relLangURL }}" alt="{{ .Params.featured_image.alt }}" title="{{ .Params.featured_image.title }}">
+{{- end }}
+{{- if and .Site.Params.show_descriptions (eq .Type "posts") -}}
+  {{- if not .Params.hide_descriptions }}
+<p itemprop="abstract"><strong>{{ .Description | markdownify }}</strong></p>
+  {{- end -}}
+{{- end }}
+{{ .Content }}
