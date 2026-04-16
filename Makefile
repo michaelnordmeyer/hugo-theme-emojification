@@ -60,7 +60,7 @@ server: icons ## Builds and serves the site
 .PHONY: rsync
 rsync: ## Syncs the artifact to the remote server
 	$(info ==> Rsyncing ${base_url}'s content to SSH host ${ssh_host}...)
-	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete --rsync-path 'sudo -u root rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
+	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete --rsync-path 'sudo -u ${ssh_user} rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
 		--exclude=.DS_Store \
 		--exclude=._* \
 		--exclude=.git \
