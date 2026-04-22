@@ -38,7 +38,7 @@ actualbuild: icons ## Actual build step. Use `build` instead
 .PHONY: robots
 robots: ## Builds robots.txt
 	$(info ==> Building ${base_url} robots.txt...)
-	@cat ../robots.txt >> exampleSite/static/robots.txt
+	@cat ../robots.txt > exampleSite/static/robots.txt
 
 .PHONY: icons
 icons: ## Builds favicons
