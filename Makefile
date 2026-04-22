@@ -16,7 +16,9 @@ ssh_path = "/srv/http/${base_url}/"
 
 .PHONY: help
 help:
-	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-14s\033[0m %s\n", $$1, $$2}'
+	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) \
+		| sort \
+		| awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-16s\033[0m %s\n", $$1, $$2}'
 
 .PHONY: build
 build: actualbuild beautify ## Builds the artifact
@@ -60,7 +62,8 @@ server: icons ## Builds and serves the site
 .PHONY: rsync
 rsync: ## Syncs the artifact to the remote server
 	$(info ==> Rsyncing ${base_url}'s content to SSH host ${ssh_host}...)
-	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete --rsync-path 'sudo -u ${ssh_user} rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
+	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete \
+		--rsync-path 'sudo -u ${ssh_user} rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
 		--exclude=.DS_Store \
 		--exclude=._* \
 		--exclude=.git \
