@@ -72,7 +72,6 @@ rsync: ## Syncs the artifact to the remote server
 		--exclude=Makefile \
 		"${output_dir}/" \
 		${ssh_user}@${ssh_host}:${ssh_path})
-	@time (curl -s -A "DeploymentLogger/1.0" --compressed https://${base_url}/deployed)
 
 .PHONY: scprobots
 scprobots: ## Copies robots.txt to the remote server
