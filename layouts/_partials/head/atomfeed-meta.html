@@ -12,6 +12,6 @@
 {{- else -}}
   {{- /* Other pages incl. home, tag terms */ -}}
   {{- range $term, $weightedPage := .Site.Taxonomies.categories }}
-  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s/%s` site.BaseURL $term $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` site.Title site.Params.atom_feed.title_separator ($term | title) | markdownify }}">
+  <link rel="alternate" type="application/atom+xml" href="{{ printf `%s/%s/%s` site.BaseURL ($term | urlize) $feedFilename | relURL }}" hreflang="{{ site.Language.Locale }}" title="{{ printf `%s%s%s` site.Title site.Params.atom_feed.title_separator ($term | title) | markdownify }}">
   {{- end -}}
 {{- end -}}
