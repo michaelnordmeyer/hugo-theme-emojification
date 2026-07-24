@@ -27,13 +27,13 @@ title = 'Hugo Theme Emojification' # CHANGE THIS
 [params] # https://gohugo.io/configuration/params/
   disable_hugo_generator_inject = true # Replaces Hugo's disableHugoGeneratorInject (set it to true). Applies to all pages and Atom feed
   fediverse_creator = '@mnordmeyer@indieweb.social' # CHANGE THIS # "@username@fediverse.example"
-  icon = '🌳' # Can be declared in front matter as well
+  icon = '🐼' # Can be declared in front matter as well
   lazy_load = true
   license_link = 'https://github.com/michaelnordmeyer/hugo-theme-emojification/blob/main/LICENSE' # CHANGE THIS
   # show_descriptions is used to enable descriptions on pages and index pages like home and categories
   show_descriptions = true
   subtitle = 'A simple and minimal single-author theme with configurable big emoji as the header link, and configurable background colors, which can be chosen for each post or page' # CHANGE THIS # Used for Atom feed, SEO, and web app manifest
-  theme_color = 'yellowgreen' # default: none (= no colors. If this CSS file is missing, there will be also no structural styling), and no favicon
+  theme_color = 'colorless' # default: none (= no colors. If this CSS file is missing, there will be also no structural styling), and no favicon
   title_separator = ' • '
 
   [params.atom_feed]
