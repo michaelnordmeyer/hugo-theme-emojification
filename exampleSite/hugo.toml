@@ -130,7 +130,7 @@ title = 'Hugo Theme Emojification' # CHANGE THIS
 [menus] # https://gohugo.io/configuration/menus/
   [[menus.main]] # Needed for webmanifest
     name = 'Home' # CHANGE THIS
-    pageref = '/'
+    pageRef = '/'
     weight = 10
 
 [module]
