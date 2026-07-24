@@ -46,6 +46,9 @@
         {{- $pages = .Pages -}}
       {{- end -}}
       {{- range $index, $page := $pages -}}
+        {{- with .Params.Categories -}}
+          {{- $params = merge $params (index hugo.Data.categories .) -}}
+        {{- end -}}
         {{- $currentYear := $page.Date.Format "2006" -}}
         {{- if ne $year $currentYear -}}
           {{- if ne $year "" }}
@@ -57,7 +60,7 @@
         {{ printf `%s id="%s">%s%s` $headingYearOpen $year $year $headingYearClose | safeHTML }}
         {{- end }}
 
-        <article itemscope itemtype="https://schema.org/BlogPosting" {{- if $params.colorful_index }} style="margin-bottom: {{ if eq (add $index 1) (len site.RegularPages) }}1em{{ else }}0{{ end }}; padding: 1em; background-color: {{ $page.Params.theme_color }};"{{ end }}>
+        <article itemscope itemtype="https://schema.org/BlogPosting" {{- if $params.colorful_index }} style="margin-bottom: {{ if eq (add $index 1) (len site.RegularPages) }}1em{{ else }}0{{ end }}; padding: 1em; background-color: {{ $page.Params.theme_color | default $params.theme_color }};"{{ end }}>
           <header>
         {{- if not $params.hide_dates }}
             <time itemprop="datePublished" {{ printf `datetime=%q` ($page.Date.Format .Site.Params.date_formats.iso8601) | safeHTMLAttr }}>{{ time.Format (i18n "post.created") $page.Date }}</time>
@@ -65,7 +68,7 @@
             {{ printf "%s %s" $headingPostLinkOpen `itemprop="headline name">` | safeHTML -}}
         {{- if $params.colorful_index -}}
           {{- if not $page.Params.hide_list_icon -}}
-            {{- $page.Params.icon | default site.Params.icon -}}&nbsp;
+            {{- $page.Params.icon | default $params.icon | default site.Params.icon -}}&nbsp;
           {{- end -}}
         {{- end -}}
             <a href="{{ $page.RelPermalink | relLangURL }}">{{ $page.LinkTitle | markdownify }}</a>{{ if in $page.Params.content_warnings "video" }}&nbsp;📽️{{ end }}{{ printf "%s" $headingPostLinkClose | safeHTML }}

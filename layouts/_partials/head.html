@@ -5,6 +5,11 @@
     {{- $data := index hugo.Data.categories . -}}
     {{- $theme_color = $data.theme_color | default $theme_color -}}
   {{- end -}}
+{{- else if and (eq .Kind "page") (eq .Type "posts") -}}
+  {{- with .Params.Categories -}}
+    {{- $data := index hugo.Data.categories . -}}
+    {{- $theme_color = $data.theme_color | default $theme_color -}}
+  {{- end -}}
 {{- end }}
 {{ partialCached "head/default.html" . }}
 {{- if or (.Sitemap.Disable) (eq .Kind "taxonomy") (eq .Kind "term") }}
