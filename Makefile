@@ -9,6 +9,9 @@ output_dir = exampleSite/$(shell hugo config --source exampleSite/ --format yaml
 base_url = $(shell baseurl=$$(hugo config --source exampleSite/ --format yaml | yq '.baseurl' | cut -c 9- | tr -d '\n'); printf "$${baseurl:0: -1}")
 
 ## Deployment settings
+log_path = "/var/log/nginx"
+nginx_user = nginx
+nginx_group = adm
 ssh_host = michaelnordmeyer.com
 ssh_port = 1111
 ssh_user = root
@@ -62,6 +65,7 @@ server: icons ## Builds and serves the site
 .PHONY: rsync
 rsync: ## Syncs the artifact to the remote server
 	$(info ==> Rsyncing ${base_url}'s content to SSH host ${ssh_host}...)
+	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'touch ${log_path}/${base_url}.log && chown ${nginx_user}:${nginx_group} ${log_path}/${base_url}.log'
 	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete \
 		--rsync-path 'sudo -u ${ssh_user} rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
 		--exclude=.DS_Store \
@@ -89,7 +93,7 @@ compressrobots: ## Compresses robots.txt on the remote server
 	@time (ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'gzip -kf -9 ${ssh_path}/robots.txt && brotli -kf -q 9 ${ssh_path}/robots.txt')
 
 .PHONY: deploy
-deploy: build rsync compress ## Builds and deploys the artifact to the remote server
+deploy: build robots rsync compress ## Builds and deploys the artifact to the remote server
 	$(info ==> Deployed ${base_url} to SSH host ${ssh_host}...)
 
 .PHONY: deployrobots
