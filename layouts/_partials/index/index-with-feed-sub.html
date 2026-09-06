@@ -12,6 +12,8 @@
           {{- $params = merge $params (index hugo.Data.categories .) -}}
           {{- $content = $params.introduction | markdownify -}}
         {{- end -}}
+      {{- else if eq .Type "tags" -}}
+        {{- $params = merge $params (index hugo.Data.taxonomies "tag") -}}
       {{- end }}
     {{- else if eq .Kind "section" }}
     <h1 itemprop="headline name">{{ .Title | markdownify }}</h1>
@@ -60,18 +62,19 @@
         {{ printf `%s id="%s">%s%s` $headingYearOpen $year $year $headingYearClose | safeHTML }}
         {{- end }}
 
-        <article itemscope itemtype="https://schema.org/BlogPosting" {{- if $params.colorful_index }} style="margin-bottom: {{ if eq (add $index 1) (len site.RegularPages) }}1em{{ else }}0{{ end }}; padding: 1em; background-color: {{ $page.Params.theme_color | default $params.theme_color }};"{{ end }}>
+        <article itemscope itemtype="https://schema.org/BlogPosting" {{- if $params.colorful_index }} style=" padding-left: calc(var(--spacing) * 0.75); border-left: calc(var(--border-size-thick) * 2) solid {{ $page.Params.theme_color | default $params.theme_color }};"{{ end }}>
           <header>
         {{- if not $params.hide_dates }}
             <time itemprop="datePublished" {{ printf `datetime=%q` ($page.Date.Format .Site.Params.date_formats.iso8601) | safeHTMLAttr }}>{{ time.Format (i18n "post.created") $page.Date }}</time>
         {{- end }}
             {{ printf "%s %s" $headingPostLinkOpen `itemprop="headline name">` | safeHTML -}}
+        {{- $icon := "" -}}
         {{- if $params.colorful_index -}}
           {{- if not $page.Params.hide_list_icon -}}
-            {{- $page.Params.icon | default $params.icon | default site.Params.icon -}}&nbsp;
+            {{- $icon = $page.Params.icon | default $params.icon | default site.Params.icon -}}
           {{- end -}}
         {{- end -}}
-            <a href="{{ $page.RelPermalink | relLangURL }}">{{ $page.LinkTitle | markdownify }}</a>{{ if in $page.Params.content_warnings "video" }}&nbsp;📽️{{ end }}{{ printf "%s" $headingPostLinkClose | safeHTML }}
+            <a href="{{ $page.RelPermalink | relLangURL }}">{{ $page.LinkTitle | markdownify }}</a>{{ if $icon }}&nbsp;{{ $icon }}{{ end }}{{ if in $page.Params.content_warnings "video" }}&nbsp;📽️{{ end }}{{ printf "%s" $headingPostLinkClose | safeHTML }}
           </header>
         {{- if and site.Params.show_descriptions $page.Description -}}
           {{- if not $params.hide_descriptions }}
