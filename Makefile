@@ -30,7 +30,7 @@ build: actualbuild beautify ## Builds the artifact
 buildwithmetrics: ## Builds the artifact
 	$(info ==> Building ${base_url} with metrics...)
 	@hugo --source exampleSite/ --logLevel info --templateMetrics --templateMetricsHints
-# 	@hugo --source exampleSite/ --logLevel info --printUnusedTemplates --templateMetrics --templateMetricsHints
+	@#hugo --source exampleSite/ --logLevel info --printUnusedTemplates --templateMetrics --templateMetricsHints
 
 .PHONY: actualbuild
 actualbuild: icons ## Actual build step. Use `build` instead
@@ -55,7 +55,7 @@ icons: ## Builds favicons
 beautify: ## Beautifies goldmark output
 	$(info ==> Beautifying ${base_url} goldmark output...)
 	@time (find "${output_dir}" -type f -name "*.html" -exec sed -i '' -E 's/ class="footnote(s|-(back)?ref)"//g ; s/ class="ancestor"//g' {} \;)
-# 	@time (find "${output_dir}" -type f -name "*.html" -exec sed -i '' -e ':a' -e 'N' -e '$!ba' -e 's/<div class="footnotes" role="doc-endnotes">\n<hr>/<div class="footnotes" role="doc-endnotes">/' {} \;)
+	@#time (find "${output_dir}" -type f -name "*.html" -exec sed -i '' -e ':a' -e 'N' -e '$!ba' -e 's/<div class="footnotes" role="doc-endnotes">\n<hr>/<div class="footnotes" role="doc-endnotes">/' {} \;)
 
 .PHONY: server
 server: icons ## Builds and serves the site
