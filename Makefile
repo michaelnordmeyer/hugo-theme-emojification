@@ -35,7 +35,7 @@ buildwithmetrics: ## Builds the artifact
 .PHONY: actualbuild
 actualbuild: icons ## Actual build step. Use `build` instead
 	$(info ==> Building ${base_url}...)
-	@time (hugo --source exampleSite/)
+	@hugo --source exampleSite/
 	@rm -rf "${output_dir}/posts/index.html"
 	@rm -rf "${output_dir}/errors/index.html"
 	@rm -rf "${output_dir}"/tags/**/feed.xml
@@ -66,7 +66,7 @@ server: icons ## Builds and serves the site
 rsync: ## Syncs the artifact to the remote server
 	$(info ==> Rsyncing ${base_url}'s content to SSH host ${ssh_host}...)
 	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'touch ${log_path}/${base_url}.log && chown ${nginx_user}:${nginx_group} ${log_path}/${base_url}.log'
-	@time (rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete \
+	@rsync -e "ssh -p ${ssh_port}" -vcrlptDShP --delete \
 		--rsync-path 'sudo -u ${ssh_user} rsync' --chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r \
 		--exclude=.DS_Store \
 		--exclude=._* \
@@ -75,22 +75,22 @@ rsync: ## Syncs the artifact to the remote server
 		--exclude=.github \
 		--exclude=Makefile \
 		"${output_dir}/" \
-		${ssh_user}@${ssh_host}:${ssh_path})
+		${ssh_user}@${ssh_host}:${ssh_path}
 
 .PHONY: scprobots
 scprobots: ## Copies robots.txt to the remote server
 	$(info ==> Scp'ing ${base_url} robots.txt to SSH host ${ssh_host}...)
-	@time (scp -P ${ssh_port} exampleSite/static/robots.txt ${ssh_user}@${ssh_host}:${ssh_path})
+	@scp -P ${ssh_port} exampleSite/static/robots.txt ${ssh_user}@${ssh_host}:${ssh_path}
 
 .PHONY: compress
 compress: ## Compresses select artifacts on the remote server
 	$(info ==> Compressing ${base_url} via SSH...)
-	@time (ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'for file in $$(find ${ssh_path} -type f -size +1100c -regex ".*\.\(css\|map\|html\|js\|json\|svg\|txt\|xml\)$$"); do printf . && gzip -kf -9 "$${file}" && brotli -kf -q 9 "$${file}"; done; echo')
+	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'for file in $$(find ${ssh_path} -type f -size +1100c -regex ".*\.\(css\|map\|html\|js\|json\|svg\|txt\|xml\)$$"); do printf . && gzip -kf -9 "$${file}" && brotli -kf -q 9 "$${file}"; done; echo'
 
 .PHONY: compressrobots
 compressrobots: ## Compresses robots.txt on the remote server
 	$(info ==> Compressing ${base_url} robots.txt via SSH...)
-	@time (ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'gzip -kf -9 ${ssh_path}/robots.txt && brotli -kf -q 9 ${ssh_path}/robots.txt')
+	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'gzip -kf -9 ${ssh_path}/robots.txt && brotli -kf -q 9 ${ssh_path}/robots.txt'
 
 .PHONY: deploy
 deploy: build robots rsync compress ## Builds and deploys the artifact to the remote server
@@ -103,7 +103,7 @@ deployrobots: robots scprobots compressrobots ## Builds and deploys robots.txt t
 .PHONY: clean
 clean: ## Cleans the artifact
 	$(info ==> Cleaning ${base_url})
-	@time (rm -rf exampleSite/.hugo_build.lock "${output_dir}" assets/assets/icons exampleSite/resources)
+	@rm -rf exampleSite/.hugo_build.lock "${output_dir}" assets/assets/icons exampleSite/resources
 
 .PHONY: draft
 draft: ## Creates a draft from a template with a UUID
