@@ -2,7 +2,7 @@
 
 /* General Baseline 2015-07 Edge 12 */
 
-:root { /* CSS variables: Baseline 2024-07 */
+:root { /* CSS variables: Baseline 2024-07 Firefox 128 */
   --font-family: ui-sans-serif, 'Segoe UI', Roboto, Ubuntu, 'Noto Sans', 'Liberation Sans', system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-family-monospace: ui-monospace, 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Monospace', 'Noto Sans Mono', 'Liberation Mono', 'SF Mono', SFMono-Regular, monospace, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-size: 110%;
