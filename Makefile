@@ -9,13 +9,14 @@ output_dir = exampleSite/$(shell hugo config --source exampleSite/ --format yaml
 base_url = $(shell baseurl=$$(hugo config --source exampleSite/ --format yaml | yq '.baseurl' | cut -c 9- | tr -d '\n'); printf "$${baseurl:0: -1}")
 
 ## Deployment settings
+root_dir_prefix = "/srv/http"
 log_path = "/var/log/nginx"
 nginx_user = nginx
 nginx_group = adm
 ssh_host = michaelnordmeyer.com
 ssh_port = 1111
 ssh_user = root
-ssh_path = "/srv/http/${base_url}/"
+ssh_path = "${root_dir_prefix}/${base_url}/"
 
 .PHONY: help
 help:
@@ -40,11 +41,6 @@ actualbuild: icons ## Actual build step. Use `build` instead
 	@rm -rf "${output_dir}/errors/index.html"
 	@rm -rf "${output_dir}"/tags/**/feed.xml
 
-.PHONY: robots
-robots: ## Builds robots.txt
-	$(info ==> Building ${base_url} robots.txt...)
-	@cat ../robots.txt > exampleSite/static/robots.txt
-
 .PHONY: icons
 icons: ## Builds favicons
 	$(info ==> Building ${base_url} icons...)
@@ -61,6 +57,11 @@ beautify: ## Beautifies goldmark output
 server: icons ## Builds and serves the site
 	$(info ==> Building and serving ${base_url} locally...)
 	@hugo server --source exampleSite/
+
+.PHONY: robots
+robots: ## Builds robots.txt
+	$(info ==> Building ${base_url} robots.txt...)
+	@cat ../robots.txt > exampleSite/static/robots.txt
 
 .PHONY: rsync
 rsync: ## Syncs the artifact to the remote server
