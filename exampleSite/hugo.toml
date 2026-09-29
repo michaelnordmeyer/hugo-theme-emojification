@@ -1,7 +1,7 @@
 # CHANGE THIS means the user needs to configure this in the site's hugo.toml
 
 baseURL = 'https://hugo-theme-emojification.michaelnordmeyer.com/' # CHANGE THIS
-# cleanDestinationDir = true
+# build.cleanDestinationDir.enable = true
 copyright = 'Copyright © Michael Nordmeyer' # CHANGE THIS
 disableAliases = true
 disableHugoGeneratorInject = true # Inserted only on the homepage, see param.disable_hugo_generator_inject

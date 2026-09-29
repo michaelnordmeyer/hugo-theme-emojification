@@ -12,4 +12,4 @@ features = ['blog', 'fast', 'personal', 'dark mode']
   name = 'Michael Nordmeyer'
   homepage = 'https://michaelnordmeyer.com/'
 
-min_version = '0.158.0'
+min_version = '0.167.0'
