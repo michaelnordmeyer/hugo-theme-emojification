@@ -97,11 +97,11 @@ compressrobots: ## Compresses robots.txt on the remote server
 
 .PHONY: deploy
 deploy: build robots rsync compress ## Builds and deploys the artifact to the remote server
-	$(info ==> Deployed ${base_url} to SSH host ${ssh_host}...)
+	$(info ==> Deployed ${base_url} to SSH host ${ssh_host})
 
 .PHONY: deployrobots
 deployrobots: robots scprobots compressrobots ## Builds and deploys robots.txt to the remote server
-	$(info ==> Deployed ${base_url} robots.txt to SSH host ${ssh_host}...)
+	$(info ==> Deployed ${base_url} robots.txt to SSH host ${ssh_host})
 
 .PHONY: clean
 clean: ## Cleans the artifact
