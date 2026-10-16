@@ -11,6 +11,9 @@
     {{- $theme_color = $data.theme_color | default $theme_color -}}
   {{- end -}}
 {{- end }}
+{{- with .Params.theme_color -}}
+  {{- $theme_color = . -}}
+{{- end -}}
 {{ partialCached "head/default.html" . }}
 {{- if or (.Sitemap.Disable) (eq .Kind "taxonomy") (eq .Kind "term") }}
   <meta name="robots" content="noindex">

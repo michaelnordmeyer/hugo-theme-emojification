@@ -36,10 +36,6 @@ This page’s `hotpink.css`:
 ```css
 @import "base/black-white.css";
 
-:root {
-  color-scheme: light dark;
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     --bg-color: hsl(330 100% 71%);
@@ -53,15 +49,7 @@ This page’s `hotpink.css`:
     --pre-bg-color: hsl(330 100% 10%);
     --fg-color: hsl(330 100% 71%);
     --decoration-color: hsl(330 100% 95%);
-    --link-color: var(--fg-color);
-    --link-u-color: var(--decoration-color);
-    --link-vis-color: var(--fg-color);
     --link-vis-u-color: hsl(330 100% 85%);
-    --line-color: var(--decoration-color);
-  }
-
-  ::selection {
-    background-color: hsl(330 100% 71% / 0.5);
   }
 }
 ```

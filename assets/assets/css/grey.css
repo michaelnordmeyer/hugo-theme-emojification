@@ -5,13 +5,13 @@
   --bg-color: hsl(0 0% 50%);
   --pre-bg-color: hsl(0 0% 45%);
   --fg-color: hsl(0 0% 100%);
+  --decoration-color: hsl(31 29% 70%);
   --link-color: hsl(92 47% 80%);
-  --link-u-color: hsl(31 29% 70%);
-  --link-vis-color: hsl(92 47% 90%);
-  --link-vis-u-color: hsl(31 29% 80%);
-  --line-color: hsl(0 0% 67%);
+  --link-vis-color: var(--link-color);
+  --link-vis-u-color: var(--link-color);
+  --line-color: alpha(from var(--fg-color) / 0.67); /* Baseline 2026-09 Safari 27 */
 }
 
 ::selection {
-  background-color: hsl(31 29% 70% / 0.5);
+  background-color: alpha(from var(--decoration-color) / 0.5); /* Baseline 2026-09 Safari 27 */
 }

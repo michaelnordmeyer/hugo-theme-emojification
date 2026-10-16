@@ -17,7 +17,7 @@ title = 'My New Hugo Site' # CHANGE THIS
   # show_descriptions is used to enable descriptions on pages and index pages like home and categories
   show_descriptions = true
   subtitle = 'The subtitle' # CHANGE THIS # Used for Atom feed, SEO, and web app manifest
-  theme_color = 'yellowgreen' # default: none (= no colors. If this CSS file is missing, there will be also no structural styling), and no favicon
+  theme_color = 'colorless' # default: none (= no colors. If this CSS file is missing, there will be also no structural styling), and no favicon
   title_separator = ' - '
 
   [params.atom_feed]
