@@ -1,6 +1,6 @@
 ---
 title: Panda on Colorless
-date: 2023-12-31 14:00:00 +00:00
+date: 2023-12-31 13:00:00 +00:00
 description: These are the supported HTML tags, which will be generated from Markdown.
 categories: ["Colors"]
 url: colors/colorless
