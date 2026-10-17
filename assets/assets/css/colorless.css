@@ -1,35 +1,21 @@
 @import "base/base-color.css";
 
 :root {
+  --bg-color: light-dark(
+    hsl(0 0% 100%),
+    hsl(0 0% 0%)); /* Baseline 2024-05 Safari 17.5 */
+  --pre-bg-color: light-dark(
+    hsl(0 0% 95%),
+    hsl(0 0% 20%)); /* Baseline 2024-05 Safari 17.5 */
+  --fg-color: light-dark(
+    hsl(0 0% 0%),
+    hsl(30 100% 97%)); /* Baseline 2024-05 Safari 17.5 */
   --decoration-color: var(--fg-color);
   --link-vis-u-color: alpha(from var(--fg-color) / 0.33); /* Baseline 2026-09 Safari 27 */
   --line-color: alpha(from var(--fg-color) / 0.33); /* Baseline 2026-09 Safari 27 */
 }
 
 ::selection {
+  background-color: light-dark(alpha(from var(--fg-color) / 0.25), alpha(from var(--fg-color) / 0.5)); /* Baseline 2026-09 Safari 27 */
   color: var(--fg-color);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg-color: hsl(0 0% 100%);
-    --pre-bg-color: hsl(0 0% 95%);
-    --fg-color: hsl(0 0% 0%);
-  }
-
-  ::selection {
-    background-color: alpha(from var(--fg-color) / 0.25); /* Baseline 2026-09 Safari 27 */
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-color: hsl(0 0% 0%);
-    --pre-bg-color: hsl(0 0% 20%);
-    --fg-color: hsl(30 100% 97%);
-  }
-
-  ::selection {
-    background-color: alpha(from var(--fg-color) / 0.5); /* Baseline 2026-09 Safari 27 */
-  }
 }
