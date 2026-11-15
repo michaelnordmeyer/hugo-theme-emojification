@@ -43,24 +43,24 @@ actualbuild: icons ## Actual build step. Use `build` instead
 
 .PHONY: icons
 icons: ## Builds favicons
-	$(info ==> Building ${base_url} icons...)
+	$(info ==> Building ${base_url}'s icons...)
 	@time (_tools/generate-icons.sh . $$(hugo config --source exampleSite/ --format yaml | yq '.params.theme_color') "★" "/System/Library/Fonts/Apple Symbols.ttf")
 	@time (for color in $$(find "${content_dir}" -type f -iname "*.md" -exec grep -E "^  theme_color: " {} \; | cut -d ':' -f 2 | cut -d ' ' -f 2 | sort | uniq); do _tools/generate-icons.sh . "$${color//\"/}" "★" "/System/Library/Fonts/Apple Symbols.ttf"; done)
 
 .PHONY: beautify
 beautify: ## Beautifies goldmark output
-	$(info ==> Beautifying ${base_url} goldmark output...)
+	$(info ==> Beautifying ${base_url}'s goldmark output...)
 	@time (find "${output_dir}" -type f -name "*.html" -exec sed -i '' -E 's/ class="footnote(s|-(back)?ref)"//g ; s/ class="ancestor"//g' {} \;)
 	@#time (find "${output_dir}" -type f -name "*.html" -exec sed -i '' -e ':a' -e 'N' -e '$!ba' -e 's/<div class="footnotes" role="doc-endnotes">\n<hr>/<div class="footnotes" role="doc-endnotes">/' {} \;)
 
 .PHONY: server
 server: icons ## Builds and serves the site
-	$(info ==> Building and serving ${base_url} locally...)
+	$(info ==> Building and serving ${base_url}'s locally...)
 	@hugo server --source exampleSite/
 
-.PHONY: robots
-robots: ## Builds robots.txt
-	$(info ==> Building ${base_url} robots.txt...)
+.PHONY: robotstxt
+robotstxt: ## Builds robots.txt
+	$(info ==> Building ${base_url}'s robots.txt...)
 	@cat ../robots.txt > exampleSite/static/robots.txt
 
 .PHONY: rsync
@@ -78,9 +78,9 @@ rsync: ## Syncs the artifact to the remote server
 		"${output_dir}/" \
 		${ssh_user}@${ssh_host}:${ssh_path}
 
-.PHONY: scprobots
-scprobots: ## Copies robots.txt to the remote server
-	$(info ==> Scp'ing ${base_url} robots.txt to SSH host ${ssh_host}...)
+.PHONY: scprobotstxt
+scprobotstxt: ## Copies robots.txt to the remote server
+	$(info ==> Scp'ing ${base_url}'s robots.txt to SSH host ${ssh_host}...)
 	@scp -P ${ssh_port} exampleSite/static/robots.txt ${ssh_user}@${ssh_host}:${ssh_path}
 
 .PHONY: compress
@@ -89,19 +89,19 @@ compress: ## Compresses select artifacts on the remote server
 	@#ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'for file in $$(find ${ssh_path} -type f -size +1100c -regex ".*\.\(css\|map\|html\|js\|json\|svg\|txt\|xml\)$$"); do printf . && gzip -kf -9 "$${file}" && brotli -kf -q 9 "$${file}"; done; echo'
 	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'for file in $$(find ${ssh_path} -type f -size +1100c -regex ".*\.\(css\|map\|html\|js\|json\|svg\|txt\|xml\)$$"); do printf . && gzip -kf -9 "$${file}"; done; echo'
 
-.PHONY: compressrobots
-compressrobots: ## Compresses robots.txt on the remote server
-	$(info ==> Compressing ${base_url} robots.txt via SSH...)
+.PHONY: compressrobotstxt
+compressrobotstxt: ## Compresses robots.txt on the remote server
+	$(info ==> Compressing ${base_url}'s robots.txt via SSH...)
 	@#ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'gzip -kf -9 ${ssh_path}/robots.txt && brotli -kf -q 9 ${ssh_path}/robots.txt'
 	@ssh -p ${ssh_port} ${ssh_user}@${ssh_host} 'gzip -kf -9 ${ssh_path}/robots.txt'
 
 .PHONY: deploy
-deploy: build robots rsync compress ## Builds and deploys the artifact to the remote server
+deploy: build robotstxt rsync compress ## Builds and deploys the artifact to the remote server
 	$(info ==> Deployed ${base_url} to SSH host ${ssh_host})
 
-.PHONY: deployrobots
-deployrobots: robots scprobots compressrobots ## Builds and deploys robots.txt to the remote server
-	$(info ==> Deployed ${base_url} robots.txt to SSH host ${ssh_host})
+.PHONY: deployrobotstxt
+deployrobotstxt: robotstxt scprobotstxt compressrobotstxt ## Builds and deploys robots.txt to the remote server
+	$(info ==> Deployed ${base_url}'s robots.txt to SSH host ${ssh_host})
 
 .PHONY: clean
 clean: ## Cleans the artifact
@@ -112,3 +112,27 @@ clean: ## Cleans the artifact
 draft: ## Creates a draft from a template with a UUID
 	$(info ==> Creating draft at exampleSite/content/posts/_drafts/${current_date}.md ...)
 	@sed -e "s/  uuid:/  uuid: $$(uuidgen)/" archetypes/posts_makefile.md > exampleSite/content/posts/_drafts/${current_date}.md
+
+.PHONY: find-used-params-themes
+find-used-params-themes: ## Finds used params
+	$(info ==> Finding ${base_url}'s used params in themes...)
+	@find . -type f -exec grep -Eo '.Params.[^\ \}\)`"]+' {} \; \
+		| sort \
+		| uniq
+
+.PHONY: find-used-params-yaml-frontmatter
+find-used-params-yaml-frontmatter: ## Finds used params
+	$(info ==> Finding ${base_url}'s used params in YAML front matter...)
+	@find content -type f -iname "*.md" -exec grep -Eo '^[ ]+[a-zA-Z]+:' {} \; \
+		| sort \
+		| uniq
+
+.PHONY: find-used-params-toml-frontmatter
+find-used-params-toml-frontmatter: ## Finds used params
+	$(info ==> Finding ${base_url}'s used params in TOML front matter having a multiple of two space indentation and one space around the equal sign...)
+	@find content -type f -iname "*.md" -exec grep -Eo '^([ ][ ])+[a-zA-Z]+ = ' {} \; \
+		| sort \
+		| uniq
+
+.PHONY: find-used-params
+find-used-params: find-used-params-themes find-used-params-yaml-frontmatter find-used-params-toml-frontmatter ## Finds used params
