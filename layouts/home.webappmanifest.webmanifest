@@ -3,7 +3,7 @@
   {{ with site.Language.Locale }}"lang": {{ . | jsonify }},{{ end }}
   {{ with site.Params.shortTitle }}"short_name": {{ . | htmlUnescape | jsonify }},{{ end }}
   {{ with site.Params.subtitle }}"description": {{ . | htmlUnescape | jsonify }},{{ end }}
-  "start_url": "/?possible_human=homescreen",
+  "start_url": "/?js_possible_human=homescreen",
   "scope" : "/",
   "display": "fullscreen",
   "orientation": "natural",
