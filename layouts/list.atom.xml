@@ -81,7 +81,7 @@
     <updated>{{ .Lastmod.Format .Site.Params.date_formats.rfc3339 | safeHTML }}</updated>
     {{- if .Params.uuid }}
     <id>{{ printf "urn:uuid:%s" .Params.uuid }}</id>
-    {{- else -}}
+    {{- else }}
     <id>{{ .Permalink }}</id>
     {{- end -}}
     {{- with site.Params.author.name }}
