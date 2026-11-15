@@ -73,6 +73,6 @@ body > main img { display: block; margin: 0 auto var(--spacing); max-width: 100%
 body > main > article > div[itemprop="articleBody"] > p[itemprop="abstract"] { text-align: center; text-wrap: balance; } /* Baseline 2024-05 */
 body > main > article > footer { margin-top: calc(var(--spacing) * 2); }
 body > main > article > footer span::before { content: '#'; }
-body > main > article > footer span { margin-left: calc(var(--spacing) * 0.5); }
+body > main > article > footer span { margin-left: calc(var(--spacing) * 1/2); }
 hr:has(+div[role="doc-endnotes"]) { margin-bottom: var(--spacing); } /* Baseline 2023-12 */
 div[role="doc-endnotes"] { margin-top: 0; font-size: var(--font-size-small); line-height: var(--line-height); }
