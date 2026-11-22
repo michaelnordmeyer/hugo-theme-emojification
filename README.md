@@ -10,7 +10,7 @@ The demo site has useful samples and shows many different color and emoji combin
 
 ## Compatibility
 
-Compatible with Hugo >= 0.158.0.
+Compatible with Hugo >= 0.167.0.
 
 ## Limited, But Useful Features
 
