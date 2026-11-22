@@ -1,0 +1,35 @@
+name: Test build compatibility of Hugo theme gems
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: "!contains(github.event.commits[0].message, '[ci skip]')"
+    name: "Hugo build (${{ matrix.hugo }} on ${{ matrix.os }})"
+    strategy:
+      fail-fast: false
+      matrix:
+        # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#choosing-github-hosted-runners
+        os: [ubuntu-latest, ubuntu-26.04-arm, macos-latest, macos-26-intel, windows-latest, windows-11-arm]
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
+        hugo: ['0.167.0', '0.170.0']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+      - name: "Set up Hugo ${{ matrix.hugo }} on ${{ matrix.os }}"
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ matrix.hugo }}
+      - name: Build Hugo
+        run: hugo build
