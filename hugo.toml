@@ -58,7 +58,6 @@ title = 'My New Hugo Site' # CHANGE THIS
 
 [module]
   [module.hugoVersion]
-    extended = true # Extended: adds .webp, .scss
     min = "0.167.0"
     # max = "0.199.0"
 
