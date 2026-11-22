@@ -20,7 +20,7 @@ jobs:
         # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#choosing-github-hosted-runners
         os: [ubuntu-latest, ubuntu-26.04-arm, macos-latest, macos-26-intel, windows-latest, windows-11-arm]
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
-        hugo: ['0.167.0', '0.170.0']
+        hugo: ['0.167.0', 'latest']
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
